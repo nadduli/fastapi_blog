@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}Payment Failed – NetConnect{% endblock %}
+
+{% block head %}
+<style>
+  .fail-wrap {
+    max-width: 500px;
+    margin: 3rem auto;
+    text-align: center;
+  }
+
+  .fail-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2rem;
+    background: rgba(232, 68, 42, 0.1);
+    border: 2px solid rgba(232, 68, 42, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    animation: shakeIn 0.5s ease both;
+  }
+
+  @keyframes shakeIn {
+    0% {
+      transform: scale(0.5) rotate(-10deg);
+      opacity: 0;
+    }
+
+    60% {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    100% {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
+  }
+
+  .fail-wrap h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+    color: var(--accent2);
+  }
+
+  .fail-wrap .subtitle {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .reason-card {
+    background: rgba(232, 68, 42, 0.07);
+    border: 1px solid rgba(232, 68, 42, 0.2);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    text-align: left;
+  }
+
+  .reason-card .icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .reason-card .body {
+    font-size: 0.88rem;
+  }
+
+  .reason-card .body strong {
+    display: block;
+    color: var(--accent2);
+    margin-bottom: 0.3rem;
+  }
+
+  .reason-card .body p {
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .tips {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+
+  .tips h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+  }
+
+  .tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.4rem 0;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  .tip-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.45rem;
+  }
+
+  .action-row {
+    display: flex;
+    gap: 0.8rem;
+  }
+
+  .action-row .btn {
+    flex: 1;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fail-wrap">
+  <div class="fail-icon fade-up">❌</div>
+
+  <h1 class="fade-up delay-1">Payment Failed</h1>
+  <p class="subtitle fade-up delay-1">
+    Your payment could not be completed. No money has been deducted from your account.
+  </p>
+
+  {% if error_reason %}
+  <div class="reason-card fade-up delay-2">
+    <div class="icon">⚠️</div>
+    <div class="body">
+      <strong>What went wrong</strong>
+      <p>{{ error_reason }}</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="tips fade-up delay-2">
+    <h3>Try these fixes</h3>
+    <div class="tip">
+      <div class="tip-bullet"></div> Make sure you have sufficient balance on your Mobile Money account.
+    </div>
+    <div class="tip">
+      <div class="tip-bullet"></div> Check that you entered the correct phone number (without +256).
+    </div>
+    <div class="tip">
+      <div class="tip-bullet"></div> Approve the payment prompt on your phone within 3 minutes.
+    </div>
+    <div class="tip">
+      <div class="tip-bullet"></div> Ensure your Mobile Money PIN is correct and your account is active.
+    </div>
+    <div class="tip">
+      <div class="tip-bullet"></div> Try switching between MTN MoMo and Airtel Money.
+    </div>
+  </div>
+
+  <div class="action-row fade-up delay-3">
+    <a href="{{ url_for('payment_page', plan_id=plan_id) }}" class="btn btn-primary">🔁 Try Again</a>
+    <a href="{{ url_for('index') }}" class="btn btn-outline">← All Plans</a>
+  </div>
+
+  <p style="font-size:0.8rem; color:var(--muted); margin-top:1.5rem;">
+    Ref: <code style="font-family:monospace; color:var(--muted);">{{ transaction_ref }}</code><br>
+    Need help?
+    <a href="https://wa.me/256750813048" style="color:var(--accent3);">WhatsApp support</a>
+  </p>
+</div>
+{% endblock %}

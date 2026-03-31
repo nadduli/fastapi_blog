@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Daniel Hotspot{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0f1e;
+      --surface: #111827;
+      --card: #161f33;
+      --border: #1e2d4a;
+      --accent: #ffcc00;
+      /* MTN yellow */
+      --accent2: #e8442a;
+      /* Airtel red */
+      --accent3: #38d9a9;
+      /* success teal */
+      --text: #e8edf5;
+      --muted: #6b7a9a;
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255, 204, 0, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(232, 68, 42, 0.06) 0%, transparent 50%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      background: rgba(10, 15, 30, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 8px var(--accent);
+      }
+
+      50% {
+        box-shadow: 0 0 20px var(--accent);
+      }
+    }
+
+    .nav-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 0.3rem 0.8rem;
+    }
+
+    /* ── MAIN WRAPPER ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: var(--radius);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0f1e;
+    }
+
+    .btn-primary:hover {
+      background: #ffd740;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(255, 204, 0, 0.3);
+    }
+
+    .btn-airtel {
+      background: var(--accent2);
+      color: #fff;
+    }
+
+    .btn-airtel:hover {
+      background: #f05540;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(232, 68, 42, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    /* ── ALERTS ── */
+    .alert {
+      padding: 1rem 1.2rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      border-left: 3px solid;
+    }
+
+    .alert-error {
+      background: rgba(232, 68, 42, 0.1);
+      border-color: var(--accent2);
+      color: #f87171;
+    }
+
+    .alert-success {
+      background: rgba(56, 217, 169, 0.1);
+      border-color: var(--accent3);
+      color: var(--accent3);
+    }
+
+    .alert-info {
+      background: rgba(255, 204, 0, 0.08);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.3s;
+    }
+
+    .delay-4 {
+      animation-delay: 0.4s;
+    }
+
+    /* ── LOADING SPINNER ── */
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav {
+        padding: 1rem;
+      }
+
+      main {
+        padding: 1.5rem 1rem 3rem;
+      }
+    }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <span></span> Daniel Hotspot
+    </div>
+    <div class="nav-hint">🔒 Secure Hotspot Portal</div>
+  </nav>
+
+  <main>
+    {# {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    #}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    &copy; {{ request.state.current_year }} Daniel Hotspot &bull; Powered by Daniel WiFi &bull; Pay with MTN MoMo &amp;
+    Airtel Money
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+{% block title %}Connected! – NetConnect{% endblock %}
+
+{% block head %}
+<style>
+  .success-wrap {
+    max-width: 520px;
+    margin: 2rem auto;
+    text-align: center;
+  }
+
+  /* ── CHECK ANIMATION ── */
+  .check-circle {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 2rem;
+    position: relative;
+  }
+
+  .check-circle svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .circle-bg {
+    fill: none;
+    stroke: rgba(56, 217, 169, 0.15);
+    stroke-width: 3;
+  }
+
+  .circle-anim {
+    fill: none;
+    stroke: var(--accent3);
+    stroke-width: 3;
+    stroke-dasharray: 251;
+    stroke-dashoffset: 251;
+    stroke-linecap: round;
+    animation: drawCircle 0.8s ease forwards 0.2s;
+  }
+
+  .check-mark {
+    stroke: var(--accent3);
+    stroke-width: 3;
+    fill: none;
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    animation: drawCheck 0.4s ease forwards 1s;
+  }
+
+  @keyframes drawCircle {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes drawCheck {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* ── HEADING ── */
+  .success-wrap h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .success-wrap h1 em {
+    font-style: normal;
+    color: var(--accent3);
+  }
+
+  .success-wrap .subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  /* ── SESSION CARD ── */
+  .session-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .session-header {
+    background: rgba(56, 217, 169, 0.07);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent3);
+  }
+
+  .session-body {
+    padding: 1.2rem 1.4rem;
+  }
+
+  .session-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.88rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .session-row:last-child {
+    border-bottom: none;
+  }
+
+  .session-row .key {
+    color: var(--muted);
+  }
+
+  .session-row .val {
+    font-weight: 600;
+  }
+
+  .session-row .val.green {
+    color: var(--accent3);
+  }
+
+  .session-row .val.yellow {
+    color: var(--accent);
+  }
+
+  /* ── EXPIRY TIMER ── */
+  .expiry-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .expiry-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .expiry-info {
+    flex: 1;
+  }
+
+  .expiry-info .label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+  }
+
+  .expiry-info .time {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── ACTIONS ── */
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .action-btn.primary {
+    background: var(--accent3);
+    color: #0a0f1e;
+    border-color: var(--accent3);
+  }
+
+  .action-btn.primary:hover {
+    background: #4ce8b9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(56, 217, 169, 0.3);
+  }
+
+  /* ── CONFETTI ── */
+  .confetti-wrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 200;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    top: -20px;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    to {
+      transform: translateY(110vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- CONFETTI -->
+<div class="confetti-wrap" id="confetti"></div>
+
+<div class="success-wrap">
+  <!-- CHECK ANIMATION -->
+  <div class="check-circle fade-up">
+    <svg viewBox="0 0 90 90">
+      <circle class="circle-bg" cx="45" cy="45" r="40" />
+      <circle class="circle-anim" cx="45" cy="45" r="40" transform="rotate(-90 45 45)" />
+      <polyline class="check-mark" points="28,45 40,57 62,33" />
+    </svg>
+  </div>
+
+  <h1 class="fade-up delay-1">You're <em>online!</em></h1>
+  <p class="subtitle fade-up delay-1">
+    Payment confirmed. Your internet session is now active —
+    enjoy browsing, streaming, and more.
+  </p>
+
+  <!-- SESSION INFO -->
+  <div class="session-card fade-up delay-2">
+    <div class="session-header">🌐 Active Session</div>
+    <div class="session-body">
+      <div class="session-row">
+        <span class="key">Plan</span>
+        <span class="val">{{ plan_name }}</span>
+      </div>
+      <div class="session-row">
+        <span class="key">Status</span>
+        <span class="val green">✓ Connected</span>
+      </div>
+      <div class="session-row">
+        <span class="key">Activated at</span>
+        <span class="val">{{ activated_at }}</span>
+      </div>
+      <div class="session-row">
+        <span class="key">Expires at</span>
+        <span class="val yellow">{{ expires_at }}</span>
+      </div>
+      <div class="session-row">
+        <span class="key">Amount paid</span>
+        <span class="val">UGX {{ "{:,}".format(amount) }}</span>
+      </div>
+      <div class="session-row">
+        <span class="key">Receipt</span>
+        <span class="val" style="font-family:monospace; font-size:0.8rem;">{{ transaction_ref }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COUNTDOWN TIMER -->
+  <div class="expiry-bar fade-up delay-3">
+    <div class="expiry-icon">⏱️</div>
+    <div class="expiry-info">
+      <div class="label">Session ends in</div>
+      <div class="time" id="sessionTimer">--:--:--</div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="action-grid fade-up delay-4">
+    <a href="http://google.com" class="action-btn primary">🌐 Start Browsing</a>
+    <a href="{{ url_for('index') }}" class="action-btn">🔁 Buy Another</a>
+  </div>
+
+  <p style="font-size:0.8rem; color:var(--muted);">
+    Save your receipt number: <code style="color:var(--accent3);">{{ transaction_ref }}</code>
+  </p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Session countdown
+  const expiresAt = new Date("{{ expires_at_iso }}");
+  const timerEl = document.getElementById('sessionTimer');
+
+  function updateTimer() {
+    const now = new Date();
+    const diff = Math.max(0, Math.floor((expiresAt - now) / 1000));
+
+    if (diff === 0) {
+      timerEl.textContent = 'Session expired';
+      timerEl.style.color = 'var(--accent2)';
+      return;
+    }
+
+    const h = String(Math.floor(diff / 3600)).padStart(2, '0');
+    const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+    const s = String(diff % 60).padStart(2, '0');
+    timerEl.textContent = `${h}:${m}:${s}`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  // Confetti burst
+  const colors = ['#ffcc00', '#e8442a', '#38d9a9', '#ffffff', '#4dabf7'];
+  const container = document.getElementById('confetti');
+
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      animation-duration: ${1.5 + Math.random() * 2}s;
+      animation-delay: ${Math.random() * 0.8}s;
+      width: ${6 + Math.random() * 8}px;
+      height: ${6 + Math.random() * 8}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+    `;
+    container.appendChild(piece);
+  }
+
+  // Remove confetti after animation
+  setTimeout(() => container.remove(), 4000);
+</script>
+{% endblock %}
