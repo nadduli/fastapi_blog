@@ -1,0 +1,241 @@
+.success-wrap {
+    max-width: 520px;
+    margin: 2rem auto;
+    text-align: center;
+  }
+
+  /* ── CHECK ANIMATION ── */
+  .check-circle {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 2rem;
+    position: relative;
+  }
+
+  .check-circle svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .circle-bg {
+    fill: none;
+    stroke: rgba(56, 217, 169, 0.15);
+    stroke-width: 3;
+  }
+
+  .circle-anim {
+    fill: none;
+    stroke: var(--accent3);
+    stroke-width: 3;
+    stroke-dasharray: 251;
+    stroke-dashoffset: 251;
+    stroke-linecap: round;
+    animation: drawCircle 0.8s ease forwards 0.2s;
+  }
+
+  .check-mark {
+    stroke: var(--accent3);
+    stroke-width: 3;
+    fill: none;
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    animation: drawCheck 0.4s ease forwards 1s;
+  }
+
+  @keyframes drawCircle {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes drawCheck {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* ── HEADING ── */
+  .success-wrap h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .success-wrap h1 em {
+    font-style: normal;
+    color: var(--accent3);
+  }
+
+  .success-wrap .subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  /* ── SESSION CARD ── */
+  .session-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .session-header {
+    background: rgba(56, 217, 169, 0.07);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent3);
+  }
+
+  .session-body {
+    padding: 1.2rem 1.4rem;
+  }
+
+  .session-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.88rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .session-row:last-child {
+    border-bottom: none;
+  }
+
+  .session-row .key {
+    color: var(--muted);
+  }
+
+  .session-row .val {
+    font-weight: 600;
+  }
+
+  .session-row .val.green {
+    color: var(--accent3);
+  }
+
+  .session-row .val.yellow {
+    color: var(--accent);
+  }
+
+  /* ── EXPIRY TIMER ── */
+  .expiry-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .expiry-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .expiry-info {
+    flex: 1;
+  }
+
+  .expiry-info .label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+  }
+
+  .expiry-info .time {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── ACTIONS ── */
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .action-btn.primary {
+    background: var(--accent3);
+    color: #0a0f1e;
+    border-color: var(--accent3);
+  }
+
+  .action-btn.primary:hover {
+    background: #4ce8b9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(56, 217, 169, 0.3);
+  }
+
+  /* ── CONFETTI ── */
+  .confetti-wrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 200;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    top: -20px;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    to {
+      transform: translateY(110vh) rotate(720deg);
+      opacity: 0;
+    }
+  }

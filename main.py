@@ -4,11 +4,13 @@ Replace the stub data with your real MikroTik / MTN / Airtel logic.
 """
 from datetime import datetime, timedelta
 from fastapi import FastAPI, Request, Form, HTTPException
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 import uuid
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 @app.middleware("http")
@@ -71,17 +73,17 @@ def get_plan(plan_id: str):
 
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def index(request: Request, mac: str = ""):
     return templates.TemplateResponse(request=request, name="home.html", context={
         "request": request,
         "plans": PLANS,
         "mac_address": mac,
-        "location_name": "Main Branch",  # from MikroTik login query
+        "location_name": "Kamwokya Site",  # from MikroTik login query
     })
 
 
-@app.get("/pay/{plan_id}", response_class=HTMLResponse)
+@app.get("/pay/{plan_id}", response_class=HTMLResponse, include_in_schema=False)
 async def payment_page(request: Request, plan_id: str, mac: str = "", redirect: str = ""):
     plan = get_plan(plan_id)
     if not plan:
@@ -95,7 +97,7 @@ async def payment_page(request: Request, plan_id: str, mac: str = "", redirect: 
     })
 
 
-@app.post("/pay/initiate", response_class=HTMLResponse)
+@app.post("/pay/initiate", response_class=HTMLResponse, include_in_schema=False)
 async def initiate_payment(
     request: Request,
     plan_id: str = Form(...),
@@ -136,7 +138,7 @@ async def payment_status(tx_ref: str):
     return {"status": "pending"}  # stub
 
 
-@app.get("/success", response_class=HTMLResponse)
+@app.get("/success", response_class=HTMLResponse, include_in_schema=False)
 async def success_page(request: Request, ref: str = ""):
     # TODO: Load real session data from DB by ref
     now = datetime.now()
@@ -153,7 +155,7 @@ async def success_page(request: Request, ref: str = ""):
     })
 
 
-@app.get("/payment/failed", response_class=HTMLResponse)
+@app.get("/payment/failed", response_class=HTMLResponse, include_in_schema=False)
 async def failed_page(request: Request, ref: str = "", plan_id: str = "24hr"):
     return templates.TemplateResponse(request=request, name="failed.html", context={
         "request": request,
