@@ -1,0 +1,215 @@
+{% extends "admin_base.html" %}
+
+{% block title %}RouterOS Connection - Daniel Hotspot Admin{% endblock %}
+
+{% block extra_head %}
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-label {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .form-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .form-input-wrapper i {
+        position: absolute;
+        left: 16px;
+        color: var(--text-muted);
+        font-size: 18px;
+    }
+    .form-input {
+        width: 100%;
+        background: rgba(15, 17, 26, 0.5);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-md);
+        padding: 14px 16px 14px 44px;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 15px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+    .form-input:focus {
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+    .form-input:focus + i {
+        color: var(--accent-primary);
+    }
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    .status-badge.offline {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    .btn-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--glass-border);
+    }
+    .btn {
+        padding: 12px 24px;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-family: inherit;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-outline {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--glass-border);
+    }
+    .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-primary);
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    /* Notification */
+    .success-alert {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #6ee7b7;
+        padding: 16px;
+        border-radius: var(--radius-md);
+        margin-bottom: 24px;
+        animation: fade-in 0.4s ease-out;
+    }
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">RouterOS Settings</h1>
+        <p class="page-subtitle">Configure your MikroTik API connection for dynamic user management</p>
+    </div>
+    <div>
+        {% if router_status == 'connected' %}
+        <div class="status-badge">
+            <i class="ri-checkbox-circle-fill"></i> Connected to MikroTik
+        </div>
+        {% else %}
+        <div class="status-badge offline">
+            <i class="ri-close-circle-fill"></i> Offline
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if message %}
+<div class="success-alert">
+    <i class="ri-checkbox-circle-line" style="font-size: 24px;"></i>
+    <div>
+        <strong>Success!</strong> {{ message }}
+    </div>
+</div>
+{% endif %}
+
+<div class="glass-panel" style="padding: 32px;">
+    <form action="/admin/router/save" method="POST">
+        <h3 style="margin-bottom: 24px; font-weight: 600; font-size: 18px; color: var(--text-primary);">API Connection Detail</h3>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label" for="ip_address">Router IP Address</label>
+                <div class="form-input-wrapper">
+                    <input type="text" id="ip_address" name="ip_address" class="form-input" placeholder="e.g., 192.168.88.1" value="{{ router_config.get('ip_address', '') }}" required>
+                    <i class="ri-route-line"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="api_port">API Port (Default: 8728)</label>
+                <div class="form-input-wrapper">
+                    <input type="number" id="api_port" name="api_port" class="form-input" placeholder="8728" value="{{ router_config.get('api_port', '8728') }}" required>
+                    <i class="ri-plug-line"></i>
+                </div>
+            </div>
+        </div>
+        
+        <h3 style="margin-bottom: 24px; margin-top: 16px; font-weight: 600; font-size: 18px; color: var(--text-primary);">Authentication</h3>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label" for="username">API Username</label>
+                <div class="form-input-wrapper">
+                    <input type="text" id="username" name="username" class="form-input" placeholder="admin" value="{{ router_config.get('username', '') }}" required>
+                    <i class="ri-user-settings-line"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">API Password</label>
+                <div class="form-input-wrapper">
+                    <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" value="{{ router_config.get('password', '') }}">
+                    <i class="ri-lock-password-line"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button type="button" class="btn btn-outline">
+                <i class="ri-refresh-line"></i> Test Connection
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="ri-save-line"></i> Save Configuration
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

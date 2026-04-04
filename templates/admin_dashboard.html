@@ -1,0 +1,163 @@
+{% extends "admin_base.html" %}
+
+{% block title %}{{ page_title }} - Daniel Hotspot Admin{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{{ greeting }}, {{ admin_name }} 👋</h1>
+        <p class="page-subtitle">Here is what's happening on your hotspot network today</p>
+    </div>
+    <div class="date-filter">
+        <select class="custom-select">
+            <option>Last 7 Days</option>
+            <option>Last 30 Days</option>
+            <option>This Year</option>
+        </select>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <!-- Today's Revenue -->
+    <div class="stat-card glass-panel">
+        <div class="stat-header">
+            <div>
+                <h3 class="stat-title">Today's Revenue</h3>
+                <div class="stat-value">Ush {{ "{:,.0f}".format(metrics.today_revenue) }}</div>
+            </div>
+            <div class="stat-icon bg-primary">
+                <i class="ri-money-dollar-circle-line"></i>
+            </div>
+        </div>
+        <div class="stat-footer">
+            <span class="trend up"><i class="ri-arrow-up-line"></i> +12%</span>
+            <span class="period">vs yesterday</span>
+        </div>
+    </div>
+
+    <!-- Weekly Revenue -->
+    <div class="stat-card glass-panel">
+        <div class="stat-header">
+            <div>
+                <h3 class="stat-title">Weekly Revenue</h3>
+                <div class="stat-value">Ush {{ "{:,.0f}".format(metrics.weekly_revenue) }}</div>
+            </div>
+            <div class="stat-icon bg-success">
+                <i class="ri-calendar-event-line"></i>
+            </div>
+        </div>
+        <div class="stat-footer">
+            <span class="trend up"><i class="ri-arrow-up-line"></i> +5%</span>
+            <span class="period">vs last week</span>
+        </div>
+    </div>
+
+    <!-- Monthly Revenue -->
+    <div class="stat-card glass-panel">
+        <div class="stat-header">
+            <div>
+                <h3 class="stat-title">Monthly Revenue</h3>
+                <div class="stat-value">Ush {{ "{:,.0f}".format(metrics.monthly_revenue) }}</div>
+            </div>
+            <div class="stat-icon bg-warning">
+                <i class="ri-calendar-check-line"></i>
+            </div>
+        </div>
+        <div class="stat-footer">
+            <span class="trend up"><i class="ri-arrow-up-line"></i> +18%</span>
+            <span class="period">vs last month</span>
+        </div>
+    </div>
+
+    <!-- Active Users -->
+    <div class="stat-card glass-panel">
+        <div class="stat-header">
+            <div>
+                <h3 class="stat-title">Active Users</h3>
+                <div class="stat-value">{{ metrics.active_users }}</div>
+            </div>
+            <div class="stat-icon bg-primary" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+                <i class="ri-user-star-line"></i>
+            </div>
+        </div>
+        <div class="stat-footer">
+            <span class="trend up"><i class="ri-arrow-up-line"></i> +3</span>
+            <span class="period">new connections in last hr</span>
+        </div>
+    </div>
+
+    <!-- Available Amount -->
+    <div class="stat-card glass-panel">
+        <div class="stat-header">
+            <div>
+                <h3 class="stat-title">Available Amount</h3>
+                <div class="stat-value">Ush {{ "{:,.0f}".format(metrics.available_amount) }}</div>
+            </div>
+            <div class="stat-icon bg-primary" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                <i class="ri-wallet-3-line"></i>
+            </div>
+        </div>
+        <div class="stat-footer">
+            <span class="period">Pending withdrawal</span>
+        </div>
+    </div>
+
+    <!-- Router Health -->
+    <div class="stat-card glass-panel">
+        <div class="stat-header">
+            <div>
+                <h3 class="stat-title">Router Health</h3>
+                <div class="stat-value">{{ metrics.router_health }}</div>
+            </div>
+            <div class="stat-icon bg-danger" style="background: linear-gradient(135deg, #f43f5e, #e11d48);">
+                <i class="ri-heart-pulse-line"></i>
+            </div>
+        </div>
+        <div class="stat-footer">
+            <span class="trend up"><i class="ri-checkbox-circle-line"></i> Online</span>
+            <span class="period">Optimal load</span>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Area -->
+<div class="charts-area">
+    <div class="chart-container glass-panel main-chart">
+        <div class="chart-header">
+            <h3 class="chart-title">Revenue Trends</h3>
+            <div class="chart-actions">
+                <button class="btn-icon"><i class="ri-more-2-fill"></i></button>
+            </div>
+        </div>
+        <div class="canvas-wrapper">
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container glass-panel side-chart">
+        <div class="chart-header">
+            <h3 class="chart-title">Popular Plans</h3>
+        </div>
+        <div class="canvas-wrapper">
+            <canvas id="plansChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Pass data to JS safely -->
+<script id="dashboard-data" type="application/json">
+    {
+        "labels": {{ metrics.chart_labels | tojson }},
+        "data": {{ metrics.chart_data | tojson }}
+    }
+</script>
+
+<!-- Custom Scripts -->
+<script src="{{ url_for('static', path='js/admin.js') }}"></script>
+{% endblock %}

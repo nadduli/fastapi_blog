@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Daniel Hotspot Admin</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Custom Auth Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/auth.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="ri-wifi-line"></i>
+                <h2>Admin Portal</h2>
+            </div>
+            <p class="auth-subtitle">Welcome back! Please enter your details.</p>
+        </div>
+
+        <form action="/auth/login" method="POST">
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <div class="form-input-wrapper">
+                    <input type="email" id="email" name="email" class="form-input" placeholder="admin@danielhotspot.com" required>
+                    <i class="ri-mail-line"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="form-input-wrapper">
+                    <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+                    <i class="ri-lock-password-line"></i>
+                </div>
+                <!-- TODO: Implement forgot password route -->
+                <a href="/auth/forgot-password" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account? <a href="/auth/register">Sign up</a>
+        </div>
+    </div>
+</body>
+</html>

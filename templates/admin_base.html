@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Daniel Hotspot Admin{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">📶</span>
+                    <h2>Admin Portal</h2>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+                        <a href="/admin/dashboard" class="nav-link">
+                            <i class="ri-dashboard-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {% if active_page == 'router' %}active{% endif %}">
+                        <a href="/admin/router" class="nav-link">
+                            <i class="ri-router-line"></i>
+                            <span>RouterOS</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="ri-user-line"></i>
+                            <span>Active Users</span>
+                            <span class="badge">45</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="ri-file-list-3-line"></i>
+                            <span>Recent Vouchers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="ri-settings-4-line"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="/auth/login" class="nav-link logout">
+                    <i class="ri-logout-box-r-line"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-bar">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="Search transactions, users...">
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="action-btn notifications-btn">
+                        <i class="ri-notification-3-line"></i>
+                        <span class="indicator"></span>
+                    </button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff&rounded=true"
+                            alt="Admin Profile">
+                        <div class="user-info">
+                            <span class="user-name">System Admin</span>
+                            <span class="user-role">Superuser</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    {% block scripts %}
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+    {% endblock %}
+</body>
+
+</html>
